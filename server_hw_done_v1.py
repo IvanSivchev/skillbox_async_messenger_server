@@ -15,8 +15,8 @@ class ServerProtocol(asyncio.Protocol):
         self.server = server
 
     def send_history(self):
-        for message in reversed(message_history[0:10]):
-            self.transport.write(message.encode())
+        for _ in message_history[-10:]:
+            self.transport.write(_.encode())
 
     def data_received(self, data: bytes):
         print(data)
@@ -55,8 +55,7 @@ class ServerProtocol(asyncio.Protocol):
 
         for user in self.server.clients:
             user.transport.write(message.encode())
-            usr_message = f"<{self.login}>  {content}"
-            message_history.append(usr_message)
+        message_history.append(f"<{self.login}>  {content}")
 
 
 class Server:
